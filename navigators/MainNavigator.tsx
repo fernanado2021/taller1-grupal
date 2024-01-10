@@ -5,8 +5,8 @@ import LoginScreen from "../screens/LoginScreen";
 import RegistroScreen from "../screens/RegistroScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import NivelesScreen from "../screens/NivelesScreen";
-import JuegosScreen from "../screens/JuegosScreen";
 import GameOverScreen from "../screens/GameOverScreen";
+import JuegosScreen from "../screens/JuegosScreen";
 
 
 const Stack = createStackNavigator();
@@ -23,7 +23,7 @@ function MyStack(){
 const Drawer = createDrawerNavigator();
 function MyDrawer(){
     return(
-        <Drawer.Navigator initialRouteName="Welcome">
+        <Drawer.Navigator>
             <Drawer.Screen name="Welcome" component={WelcomeScreen}/>
             <Drawer.Screen name="Niveles" component={NivelesScreen}/>
             <Drawer.Screen name="Juegos" component={JuegosScreen} />
@@ -35,7 +35,7 @@ function MyDrawer(){
 export default function MainNavigator(){
     return(
         <NavigationContainer>
-            <MyDrawer/>
+            <MyStack/>
         </NavigationContainer>
     )
 }
