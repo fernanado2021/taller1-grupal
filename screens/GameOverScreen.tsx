@@ -1,31 +1,21 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-
-export default function GameOverScreen() {
-  return (
-    <View>
-      <Text>GameOverScreen</Text>
-    </View>
-  )
-}import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
+import React from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { db } from '../config/Config';
+
 const GameOverScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const [nickname, setNickname] = useState('');
   const score = route.params?.score || 0;
+
+  const handlePlayAgain = () => {
+    // Navegar de vuelta a la pantalla de selección de dificultad
+    navigation.navigate('Niveles');
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Juego terminado</Text>
-      <Text style={styles.score}>Puntuación final: {score}</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Ingresa tu nickname"
-        onChangeText={(text) => setNickname(text)}
-      />
+      <Text style={styles.gameOverText}>Juego terminado</Text>
+      <Text style={styles.scoreText}>Puntuación final: {score}</Text>
       <Button title="Jugar de nuevo" onPress={handlePlayAgain} />
     </View>
   );
@@ -37,22 +27,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
+  gameOverText: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
   },
-  score: {
+  scoreText: {
     fontSize: 18,
-    marginBottom: 16,
-  },
-  input: {
-    height: 40,
-    width: '80%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingLeft: 10,
+    marginBottom: 24,
   },
 });
 
