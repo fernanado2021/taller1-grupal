@@ -16,7 +16,7 @@ const GameOverScreen = () => {
     <View style={styles.container}>
       <Text style={styles.gameOverText}>Juego terminado</Text>
       <Text style={styles.scoreText}>Puntuación final: {score}</Text>
-      <Button title="Jugar de nuevo" onPress={handlePlayAgain} />
+      <Button title="Jugar de nuevo" onPress={handlePlayAgain} color={"#D4AC0D"} />
     </View>
   );
 };

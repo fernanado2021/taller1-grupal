@@ -43,23 +43,26 @@ export default function PerfilScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>PerfilScreen</Text>
+      <Text style={styles.title}>ACTUALIZAR DATOS</Text>
       <TextInput
+      style={styles.input}
         placeholder='Ingrese su correo actual'
         onChangeText={(texto) => setCorreo(texto)}
       />
 
       <TextInput
+      style={styles.input}
         placeholder='Ingrese su nuevo nick'
         onChangeText={(texto) => setNick(texto)}
       />
 
       <TextInput
+      style={styles.input}
         placeholder='Ingrese su nueva edad'
         onChangeText={(texto) => setEdad(texto)}
       />
 
-      <Button title='Actualizar' onPress={() => actualizar(correo,nick, edad)} color={'green'} />
+      <Button color={"#50C878"} title='Actualizar' onPress={() => actualizar(correo,nick, edad)}/>
     </View>
   );
 }
@@ -72,4 +75,20 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
   },
-});
+   title: {
+    fontSize: 30,
+    marginBottom: 20,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  input: {
+    width: '80%',
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+  }
+  });

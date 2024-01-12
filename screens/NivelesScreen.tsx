@@ -11,9 +11,15 @@ const NivelesScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Seleccione la dificultad:</Text>
-      <Button title="Fácil" onPress={() => startGame('easy')} style={styles.button} />
-      <Button title="Moderado" onPress={() => startGame('medium')} style={styles.button} />
-      <Button title="Difícil" onPress={() => startGame('hard')} style={styles.button} />
+      <View >
+      <Button title="Fácil" onPress={() => startGame('easy')}  color={"#CB4335"} />
+      </View>
+      <View style={{marginTop: 10}}>
+      <Button title="Moderado" onPress={() => startGame('medium')} color={"#CB4335"} />
+      </View>
+      <View style={{marginTop: 10}}>
+      <Button title="Difícil" onPress={() => startGame('hard')}  color={"#CB4335"}/>
+      </View>
     </View>
   );
 };
@@ -27,13 +33,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0', // Cambia el color de fondo según tus preferencias
   },
   title: {
-    fontSize: 18,
-    marginBottom: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-  },
-  button: {
-    marginVertical: 10,
-  },
+    marginBottom: 16,
+  }  
+  
 });
 
 export default NivelesScreen;
