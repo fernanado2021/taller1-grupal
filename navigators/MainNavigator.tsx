@@ -7,6 +7,7 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import NivelesScreen from "../screens/NivelesScreen";
 import GameOverScreen from "../screens/GameOverScreen";
 import JuegosScreen from "../screens/JuegosScreen";
+import PerfilScreen from "../screens/PerfilScreen";
 
 
 const Stack = createStackNavigator();
@@ -28,6 +29,7 @@ function MyDrawer(){
             <Drawer.Screen name="Niveles" component={NivelesScreen}/>
             <Drawer.Screen name="Juegos" component={JuegosScreen} />
             <Drawer.Screen name="GameOver" component={GameOverScreen}/>
+            <Drawer.Screen name="Perfil" component={PerfilScreen}/>
         </Drawer.Navigator>
     )
 }
