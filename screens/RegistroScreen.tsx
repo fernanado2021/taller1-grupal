@@ -1,9 +1,13 @@
-import { StyleSheet, Text, View, Button, Alert, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, TextInput, Image } from 'react-native';
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from '../config/Config';
 import { ref, update } from "firebase/database";
 import * as ImagePicker from 'expo-image-picker';
+//firebase
+import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from '../config/Config';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function RegistroScreen({ navigation }: any) {
   const [correo, setCorreo] = useState('');
@@ -66,59 +70,84 @@ export default function RegistroScreen({ navigation }: any) {
         }
       });
   }
+ 
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Registro</Text>
-      <TextInput
-        style={styles.input}
-        placeholder='Ingrese email'
-        onChangeText={(texto) => setCorreo(texto)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder='Ingrese contraseña'
-        onChangeText={(texto) => setContrasenia(texto)}
-        secureTextEntry={true}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Ingrese un nick"
-        onChangeText={(texto) => setNick(texto)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Edad"
-        onChangeText={(texto) => setEdad(texto)}
-      />
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Registro</Text>
+        <TextInput
+          style={styles.input}
+          placeholder='Ingrese email'
+          onChangeText={(texto) => setCorreo(texto)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder='Ingrese contraseña'
+          onChangeText={(texto) => setContrasenia(texto)}
+          secureTextEntry={true}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Ingrese un nick"
+          onChangeText={(texto) => setNick(texto)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Edad"
+          onChangeText={(texto) => setEdad(texto)}
+        />
+        <TouchableOpacity onPress={() => pickImage()} style={styles.button}>
+          <Text style={styles.buttonText}>Seleccionar imagen</Text>
+        </TouchableOpacity>
+        <Image source={{ uri: imagen }} style={styles.img} />
+        <TouchableOpacity onPress={() => subirImagen('Avatars')} style={styles.button}>
+          <Text style={styles.buttonText}>Cargar imagen</Text>
+        </TouchableOpacity>
 
-      <Button title='Registrarse' onPress={() => registro()} />
-    </View>
-  );
-}
+        <Button title='Registrarse' onPress={() => registro()} />
+      </View>
+    );
+  }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0', // Cambiado el color de fondo
-    padding: 20, // Añadido espacio de relleno
-  },
-  title: {
-    fontSize: 30,
-    marginBottom: 20,
-    fontWeight: 'bold', // Añadido negrita
-    color: '#333', // Cambiado el color del texto
-  },
-  input: {
-    width: '80%',
-    height: 40,
-    borderColor: '#ccc', // Cambiado el color del borde
-    borderWidth: 1,
-    marginBottom: 20,
-    padding: 10,
-    borderRadius: 8,
-    backgroundColor: '#fff', // Añadido color de fondo
-  },
-});
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#f0f0f0', // Cambiado el color de fondo
+      padding: 20, // Añadido espacio de relleno
+    },
+    title: {
+      fontSize: 30,
+      marginBottom: 20,
+      fontWeight: 'bold', // Añadido negrita
+      color: '#333', // Cambiado el color del texto
+    },
+    img: {
+      width: 300,
+      height: 300,
+      resizeMode: 'contain'
+    },
+    button: {
+      backgroundColor: '#FBE1AD',
+      borderRadius: 5,
+      padding: 10,
+      marginBottom: 10,
+      width: '100%',
+      alignItems: 'center',
+    },
+    buttonText: {
+      color: 'Black',
+      fontSize: 16,
+    },
+    input: {
+      width: '80%',
+      height: 40,
+      borderColor: '#ccc', // Cambiado el color del borde
+      borderWidth: 1,
+      marginBottom: 20,
+      padding: 10,
+      borderRadius: 8,
+      backgroundColor: '#fff', // Añadido color de fondo
+    }
+  });
