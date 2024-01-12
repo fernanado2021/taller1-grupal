@@ -2,12 +2,15 @@ import { StyleSheet, Text, View, Button, Alert, TextInput, Image } from 'react-n
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from '../config/Config';
-import { ref, update } from "firebase/database";
+
+
 import * as ImagePicker from 'expo-image-picker';
 //firebase
-import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref as databaseRef, onValue, update } from "firebase/database"
+import { getStorage, uploadBytes, getDownloadURL,ref } from "firebase/storage";
 import { storage } from '../config/Config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
 
 export default function RegistroScreen({ navigation }: any) {
   const [correo, setCorreo] = useState('');
@@ -32,13 +35,34 @@ export default function RegistroScreen({ navigation }: any) {
       setimagen(result.assets[0].uri);
     }
   };
+  async function subirImagen(nombre) {
+    const storageRef = ref(storage, 'avatars/' + nombre);
+
+    try {
+      const response = await fetch(imagen);
+      const blob = await response.blob();
+
+      await uploadBytes(storageRef, blob, {
+        contentType: 'image/jpg'
+      });
+
+      console.log('La imagen se subió con éxito');
+      Alert.alert('Mensaje', 'La imagen se subio con exito')
+
+      // Obtiene la URL de la imagen
+      //const imageURL = await getDownloadURL(storageRef);
+      //console.log('URL de desacarga de la imagen', imageURL);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   function registro() {
     createUserWithEmailAndPassword(auth, correo, contrasenia)
       .then((userCredential) => {
         const user = userCredential.user;
 
         // Guardar información adicional en la base de datos
-        const userRef = ref(db, `usuarios/${correo.replace(/\./g, '_')}`);
+        const userRef = databaseRef(db, `usuarios/${correo.replace(/\./g, '_')}`);
         update(userRef, {
           nick: nick,
           edad: edad,
