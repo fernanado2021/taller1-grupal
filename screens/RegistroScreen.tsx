@@ -3,13 +3,31 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from '../config/Config';
 import { ref, update } from "firebase/database";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function RegistroScreen({ navigation }: any) {
   const [correo, setCorreo] = useState('');
   const [contrasenia, setContrasenia] = useState('');
   const [nick, setNick] = useState('');
   const [edad, setEdad] = useState('');
+  const [imagen, setimagen] = useState(' ')
 
+  //cargar imagen desde la galeria
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true, //editar img true : false
+      aspect: [4, 3], //dimension de la imagen
+      quality: 1, //calidad
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setimagen(result.assets[0].uri);
+    }
+  };
   function registro() {
     createUserWithEmailAndPassword(auth, correo, contrasenia)
       .then((userCredential) => {
