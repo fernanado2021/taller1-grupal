@@ -8,6 +8,7 @@ import NivelesScreen from "../screens/NivelesScreen";
 import GameOverScreen from "../screens/GameOverScreen";
 import JuegosScreen from "../screens/JuegosScreen";
 import PerfilScreen from "../screens/PerfilScreen";
+import AvatarScreen from "../screens/AvatarScreen";
 
 
 const Stack = createStackNavigator();
@@ -17,6 +18,8 @@ function MyStack(){
             <Stack.Screen name="Login" component={LoginScreen}/>
             <Stack.Screen name="Registro" component={RegistroScreen}/>
             <Stack.Screen name="Drawer" component={MyDrawer} options={{headerShown: false}}/>
+            <Stack.Screen name="Avatar" component={AvatarScreen} options={{headerShown: false}}/>
+
         </Stack.Navigator>
     )
 }

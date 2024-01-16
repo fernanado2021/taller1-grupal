@@ -11,7 +11,21 @@ import { getStorage, uploadBytes, getDownloadURL,ref } from "firebase/storage";
 import { storage } from '../config/Config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+useEffect(() => {
 
+  /// es para traer la imagen e insertar como avatar desde la base de datos en tiempo real
+   const db = getDatabase();
+   const starCountRef = ref(db, 'posts/' + postId + '/starCount');
+   onValue(starCountRef, (snapshot) => {
+     const data = snapshot.val();
+     updateStarCount(postElement, data);
+   });
+ 
+   return () => {
+
+   }
+ }, [])
+ 
 export default function RegistroScreen({ navigation }: any) {
   const [correo, setCorreo] = useState('');
   const [contrasenia, setContrasenia] = useState('');
