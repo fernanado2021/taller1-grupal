@@ -17,7 +17,11 @@ function MyStack(){
             <Stack.Screen name="Login" component={LoginScreen}/>
             <Stack.Screen name="Registro" component={RegistroScreen}/>
             <Stack.Screen name="Drawer" component={MyDrawer} options={{headerShown: false}}/>
+<<<<<<< HEAD
     
+=======
+            <Stack.Screen name="Avatar" component={AvatarScreen} options={{headerShown: false}}/>
+>>>>>>> 7224bccb751236390593804993db977dd698b46b
         </Stack.Navigator>
     )
 }
@@ -28,9 +32,9 @@ function MyDrawer(){
         <Drawer.Navigator>
             <Drawer.Screen name="Welcome" component={WelcomeScreen}/>
             <Drawer.Screen name="Niveles" component={NivelesScreen}/>
-            <Drawer.Screen name="Juegos" component={JuegosScreen} />
-            <Drawer.Screen name="GameOver" component={GameOverScreen}/>
             <Drawer.Screen name="Perfil" component={PerfilScreen}/>
+            <Drawer.Screen name="Juegos" component={JuegosScreen} options={{ drawerLabel: () => null }} />
+            <Drawer.Screen name="GameOver" component={GameOverScreen}options={{ drawerLabel: () => null }}/>
         </Drawer.Navigator>
     )
 }
