@@ -2,29 +2,14 @@ import { StyleSheet, Text, View, Button, Alert, TextInput, Image } from 'react-n
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from '../config/Config';
-
-
+ 
+ 
 import * as ImagePicker from 'expo-image-picker';
 //firebase
 import { ref as databaseRef, onValue, update } from "firebase/database"
 import { getStorage, uploadBytes, getDownloadURL,ref } from "firebase/storage";
 import { storage } from '../config/Config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
-useEffect(() => {
-
-  /// es para traer la imagen e insertar como avatar desde la base de datos en tiempo real
-   const db = getDatabase();
-   const starCountRef = ref(db, 'posts/' + postId + '/starCount');
-   onValue(starCountRef, (snapshot) => {
-     const data = snapshot.val();
-     updateStarCount(postElement, data);
-   });
- 
-   return () => {
-
-   }
- }, [])
  
 export default function RegistroScreen({ navigation }: any) {
   const [correo, setCorreo] = useState('');
@@ -32,7 +17,7 @@ export default function RegistroScreen({ navigation }: any) {
   const [nick, setNick] = useState('');
   const [edad, setEdad] = useState('');
   const [imagen, setimagen] = useState(' ')
-
+ 
   //cargar imagen desde la galeria
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -42,77 +27,65 @@ export default function RegistroScreen({ navigation }: any) {
       aspect: [4, 3], //dimension de la imagen
       quality: 1, //calidad
     });
-
+ 
     console.log(result);
-
+ 
     if (!result.canceled) {
       setimagen(result.assets[0].uri);
     }
   };
-  async function subirImagen(nombre) {
-    const storageRef = ref(storage, 'avatars/' + nombre);
-
-    try {
-      const response = await fetch(imagen);
-      const blob = await response.blob();
-
-      await uploadBytes(storageRef, blob, {
-        contentType: 'image/jpg'
-      });
-
-      console.log('La imagen se subió con éxito');
-      Alert.alert('Mensaje', 'La imagen se subio con exito')
-
-      // Obtiene la URL de la imagen
-      //const imageURL = await getDownloadURL(storageRef);
-      //console.log('URL de desacarga de la imagen', imageURL);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  function registro() {
-    createUserWithEmailAndPassword(auth, correo, contrasenia)
-      .then((userCredential) => {
-        const user = userCredential.user;
-
+ 
+    async function subirImagenYRegistrar() {
+      try {
+        // Subir la imagen
+        const storageRef = ref(storage, 'avatars/' + correo);
+        const response = await fetch(imagen);
+        const blob = await response.blob();
+        await uploadBytes(storageRef, blob, {
+          contentType: 'image/jpg',
+        });
+   
+        // Obtener la URL de la imagen
+        const imageURL = await getDownloadURL(storageRef);
+        console.log('URL de descarga de la imagen', imageURL);
+   
+        // Registro de usuario
+        const userCredential = await createUserWithEmailAndPassword(auth, correo, contrasenia);
+        const user = userCredential.user
+   
         // Guardar información adicional en la base de datos
         const userRef = databaseRef(db, `usuarios/${correo.replace(/\./g, '_')}`);
-        update(userRef, {
+        await update(userRef, {
           nick: nick,
           edad: edad,
-        })
-
-        console.log("REGISTRO CORRECTO");
-        // Mostrar una alerta de registro exitoso
+          avatarURL: imageURL, // Añade la URL de la imagen al objeto
+        });
+   
+        // Registro exitoso
+        console.log('REGISTRO CORRECTO');
         Alert.alert('Registro exitoso', '¡Bienvenido! Has sido registrado correctamente.');
-        navigation.navigate('Drawer');
+        navigation.navigate('Login');
+   
         // Limpiar los campos después de un registro exitoso
         setCorreo('');
         setContrasenia('');
         setNick('');
         setEdad('');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-
-        switch (errorCode) {
-          case 'auth/weak-password':
-            Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
-            break;
-          case 'auth/email-already-in-use':
-            Alert.alert('Error', 'El correo electrónico ya está registrado. Por favor, inicia sesión o utiliza otro correo.');
-            break;
-          default:
-            Alert.alert('Error', 'Ocurrió un error durante el registro');
-            break;
-        }
-      });
-  }
- 
-
+      } catch (error) {
+        // Manejar errores
+        console.error(error);
+        Alert.alert('Error', 'Ocurrió un error durante la carga de imagen o el registro.');
+      }
+    }
+   
+   
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Registro</Text>
+        <Image source={{ uri: imagen }} style={styles.img} />
+        <TouchableOpacity onPress={() => pickImage()} style={styles.button}>
+          <Text style={styles.buttonText}>Seleccionar imagen</Text>
+        </TouchableOpacity>
         <TextInput
           style={styles.input}
           placeholder='Ingrese email'
@@ -134,19 +107,11 @@ export default function RegistroScreen({ navigation }: any) {
           placeholder="Edad"
           onChangeText={(texto) => setEdad(texto)}
         />
-        <TouchableOpacity onPress={() => pickImage()} style={styles.button}>
-          <Text style={styles.buttonText}>Seleccionar imagen</Text>
-        </TouchableOpacity>
-        <Image source={{ uri: imagen }} style={styles.img} />
-        <TouchableOpacity onPress={() => subirImagen('Avatars')} style={styles.button}>
-          <Text style={styles.buttonText}>Cargar imagen</Text>
-        </TouchableOpacity>
-
-        <Button title='Registrarse' onPress={() => registro()} />
+        <Button title='Registrarse' onPress={() => subirImagenYRegistrar()} />
       </View>
     );
   }
-
+ 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
