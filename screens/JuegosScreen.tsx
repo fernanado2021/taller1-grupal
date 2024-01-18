@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, ImageBackgroundBase } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types';
 // LISTO
@@ -82,6 +82,7 @@ const JuegoScreen = () => {
   }, [difficulty]);
 
   return (
+
     <View style={styles.container}>
       <Text>Tiempo restante: {time} segundos</Text>
       <Text>Puntuación: {score}</Text>
@@ -99,6 +100,7 @@ const JuegoScreen = () => {
         </TouchableOpacity>
       ))}
     </View>
+    
   );
 };
 
@@ -124,6 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+   backgroundColor: '#c57d56'
   },
   fly: {
     position: 'absolute',
