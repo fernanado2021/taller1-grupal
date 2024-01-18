@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from '../config/Config';
  
- 
 import * as ImagePicker from 'expo-image-picker';
 //firebase
 import { ref as databaseRef, onValue, update } from "firebase/database"

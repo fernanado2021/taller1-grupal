@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../config/Config';
 
+
 export default function LoginScreen({ navigation }: any) {
 
   const [correo, setCorreo] = useState('');

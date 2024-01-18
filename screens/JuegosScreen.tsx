@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, ImageBackgroundBase } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types';
-// LISTO
+
 const JuegoScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
@@ -84,23 +84,25 @@ const JuegoScreen = () => {
   return (
 
     <View style={styles.container}>
-      <Text>Tiempo restante: {time} segundos</Text>
-      <Text>Puntuación: {score}</Text>
+      <ImageBackground source={{uri:'https://lapsonmexico.com/wp-content/uploads/2021/12/51PfTF2p3XL._AC_.jpg'}} style={styles.backgroundImage}>
+        <Text>Tiempo restante: {time} segundos</Text>
+        <Text>Puntuación: {score}</Text>
 
-      {flies.map((fly) => (
-        <TouchableOpacity
-          key={fly.id}
-          style={[styles.fly, { left: fly.x, top: fly.y }]}
-          onPress={() => handleFlyClick(fly.id)}
-        >
-          <Image
-            source={{ uri: 'https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-cartoon-fly-vector-icon-with-big-eyes-on-a-beige-background-png-image_6822893.png' }}
-            style={styles.flyImage}
-          />
-        </TouchableOpacity>
-      ))}
+        {flies.map((fly) => (
+          <TouchableOpacity
+            key={fly.id}
+            style={[styles.fly, { left: fly.x, top: fly.y }]}
+            onPress={() => handleFlyClick(fly.id)}
+          >
+            <Image
+              source={{ uri: 'https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-cartoon-fly-vector-icon-with-big-eyes-on-a-beige-background-png-image_6822893.png' }}
+              style={styles.flyImage}
+            />
+          </TouchableOpacity>
+        ))}
+      </ImageBackground>
     </View>
-    
+
   );
 };
 
@@ -126,7 +128,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-   backgroundColor: '#c57d56'
+    backgroundColor: '#c57d56'
+  },
+  backgroundImage:{
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
   fly: {
     position: 'absolute',
