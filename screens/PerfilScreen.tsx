@@ -1,68 +1,66 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, Text, Button, TextInput, Image, StyleSheet, Alert } from 'react-native';
 import { db } from '../config/Config';
-import { ref, onValue, update } from "firebase/database";
+import { ref, onValue, update } from 'firebase/database';
 
 export default function PerfilScreen() {
+  const [correo, setCorreo] = useState('');
   const [nick, setNick] = useState('');
   const [edad, setEdad] = useState('');
-  const [correo, setCorreo] = useState('');
-
-
-  const [datos, setDatos] = useState([]);
+  const [avatarURL, setAvatarURL] = useState('');
 
   useEffect(() => {
-    const starCountRef = ref(db, 'usuarios/');
+    const starCountRef = ref(db, `usuarios/${correo.replace(/\./g, '_')}`);
     onValue(starCountRef, (snapshot) => {
-      const data = snapshot.val();
-
-      const dataTemp = Object.keys(data).map((key) => ({
-        key, ...data[key]
-      }));
-
-      setDatos(dataTemp);
+      const userData = snapshot.val();
+      if (userData) {
+        setNick(userData.nick);
+        setEdad(userData.edad);
+        setAvatarURL(userData.avatarURL);
+      }
     });
-  }, []);
+  }, [correo]);
 
-  function actualizar(correo,nick, edad) {
+  function actualizar() {
+    // Realiza la actualización en la base de datos
     update(ref(db, `usuarios/${correo.replace(/\./g, '_')}`), {
       edad: edad,
-      nick:nick
+      nick: nick,
     })
-    .then(() => {
-      // Actualización exitosa
-      Alert.alert('Éxito', 'Perfil actualizado correctamente.');
-      console.log('Perfil actualizado correctamente');
-    })
-    .catch((error) => {
-      // Error durante la actualización
-      console.error('Error al actualizar el perfil:', error);
-      Alert.alert('Error', 'Ocurrió un error al actualizar el perfil.');
-    });
+      .then(() => {
+        Alert.alert('Éxito', 'Perfil actualizado correctamente.');
+        console.log('Perfil actualizado correctamente');
+      })
+      .catch((error) => {
+        console.error('Error al actualizar el perfil:', error);
+        Alert.alert('Error', 'Ocurrió un error al actualizar el perfil.');
+      });
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>ACTUALIZAR DATOS</Text>
+      <Image source={{ uri: avatarURL }} style={styles.avatar} />
       <TextInput
-      style={styles.input}
+        style={styles.input}
         placeholder='Ingrese su correo actual'
         onChangeText={(texto) => setCorreo(texto)}
       />
 
       <TextInput
-      style={styles.input}
+        style={styles.input}
         placeholder='Ingrese su nuevo nick'
         onChangeText={(texto) => setNick(texto)}
       />
 
       <TextInput
-      style={styles.input}
+        style={styles.input}
         placeholder='Ingrese su nueva edad'
         onChangeText={(texto) => setEdad(texto)}
       />
 
-      <Button color={"#50C878"} title='Actualizar' onPress={() => actualizar(correo,nick, edad)}/>
+      <Button color={'#50C878'} title='Actualizar' onPress={() => actualizar()} />
+
     </View>
   );
 }
@@ -75,7 +73,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
   },
-   title: {
+  title: {
     fontSize: 30,
     marginBottom: 20,
     fontWeight: 'bold',
@@ -90,5 +88,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     backgroundColor: '#fff',
-  }
-  });
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: 20,
+  },
+});
